@@ -24,6 +24,9 @@
       <div id="clock">--:--:--</div>
       <div>ГРАЖДАНИН: <b id="citizen">—</b></div>
     </div>
+    <button class="burger" id="burger" aria-label="Меню разделов" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
   <nav class="tabs"><div class="tabs-inner" id="tabs"></div></nav>
 </header>
@@ -64,6 +67,15 @@
     <span>СБОРКА 77.4.11 · КОНТУР «БЫТ-4»</span>
   </div>
 </footer>
+
+<!-- ================= БУРГЕР-МЕНЮ ================= -->
+<aside class="menu" id="menu" aria-hidden="true">
+  <div class="menu-h">
+    <b>КРАСНАЯ СЕТЬ</b>
+    <p>ОГАС · навигация контура · 18 разделов</p>
+  </div>
+  <nav id="menulist"></nav>
+</aside>
 
 <!-- ================= КОРЗИНА ================= -->
 <button class="cartbtn" id="cartbtn">Заказ <b id="cartn">0</b></button>
