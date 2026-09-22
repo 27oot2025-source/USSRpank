@@ -104,14 +104,14 @@ input,select,textarea{font-family:inherit}
 .sysinfo{margin-left:auto;text-align:right;font-size:10.5px;color:var(--txt-mute);letter-spacing:.1em}
 .sysinfo b{color:var(--cyan);font-weight:400}
 .sysinfo .ok{color:#3ad17c}
-@media(max-width:760px){.sysinfo{display:none}}
+@media(max-width:760px){.sysinfo{display:none}.burger{margin-left:auto}}
 
 /* ============ ВКЛАДКИ ============ */
 .tabs{
   background:#0a0e13;border-top:1px solid var(--line);
   overflow-x:auto;scrollbar-width:thin;
 }
-.tabs-inner{max-width:var(--grid);margin:0 auto;display:flex;gap:1px;padding:0 10px}
+.tabs-inner{display:flex;gap:1px;padding:0 10px} /* вкладки начинаются с левого края экрана */
 .tab{
   position:relative;flex:none;
   padding:11px 15px 10px;
@@ -128,6 +128,48 @@ input,select,textarea{font-family:inherit}
 }
 .tab.on i{color:var(--amber)}
 .tab.on::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:1px;background:var(--red)}
+
+/* ============ БУРГЕР-МЕНЮ ============ */
+.burger{
+  width:42px;height:36px;flex:none;margin-left:14px;cursor:pointer;
+  background:var(--ink-3);border:1px solid var(--line-2);
+  display:flex;flex-direction:column;justify-content:center;gap:5px;padding:0 9px;
+  transition:.16s;
+}
+.burger span{display:block;height:2px;background:var(--red-l);transition:.22s}
+.burger span:nth-child(2){background:var(--amber)}
+.burger:hover{border-color:var(--red)}
+.burger.on{border-color:var(--red)}
+.burger.on span:nth-child(1){transform:translateY(7px) rotate(45deg);background:var(--amber)}
+.burger.on span:nth-child(2){opacity:0}
+.burger.on span:nth-child(3){transform:translateY(-7px) rotate(-45deg);background:var(--amber)}
+.menu{
+  position:fixed;top:0;left:0;bottom:0;width:322px;max-width:88vw;z-index:970;
+  background:var(--ink-2);border-right:1px solid var(--red-d);
+  transform:translateX(-103%);transition:transform .28s cubic-bezier(.4,0,.2,1);
+  overflow-y:auto;box-shadow:var(--shadow);
+}
+.menu.on{transform:none}
+.menu-h{
+  padding:16px 18px;border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(224,16,33,.25),transparent);
+}
+.menu-h b{font-family:var(--f-black);color:#fff;font-size:15px;letter-spacing:.06em}
+.menu-h p{font-size:10.5px;color:var(--txt-mute);letter-spacing:.18em;text-transform:uppercase;margin-top:4px}
+.menu nav{padding:8px 0 26px}
+.menu nav button{
+  display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+  padding:9px 18px;background:none;border:0;border-left:2px solid transparent;
+  color:var(--txt-dim);font-family:var(--f-head);font-size:13.5px;letter-spacing:.06em;
+  text-transform:uppercase;cursor:pointer;transition:.14s;
+}
+.menu nav button i{font-style:normal;font-family:var(--f-mono);font-size:10.5px;color:var(--txt-mute);width:20px;flex:none}
+.menu nav button:hover{color:#fff;background:#141b23;border-left-color:var(--amber)}
+.menu nav button.on{
+  color:#fff;border-left-color:var(--red);
+  background:linear-gradient(90deg,rgba(224,16,33,.3),transparent);
+}
+.menu nav button.on i{color:var(--amber)}
 
 /* ============ ОБЩЕЕ ============ */
 main{min-height:80vh}
@@ -348,17 +390,36 @@ main{min-height:80vh}
 }
 .modal.on{display:grid}
 .modal-in{
-  max-width:880px;width:100%;background:var(--ink-2);border:1px solid var(--red-d);
+  max-width:960px;width:100%;background:var(--ink-2);border:1px solid var(--red-d);
   box-shadow:var(--shadow);position:relative;animation:pop .25s ease;
 }
 @keyframes pop{from{transform:scale(.94);opacity:0}to{transform:none;opacity:1}}
 .modal-x{position:absolute;top:8px;right:12px;font-size:26px;color:var(--txt-dim);z-index:3;line-height:1}
 .modal-x:hover{color:var(--red-l)}
-.modal-grid{display:grid;grid-template-columns:1fr 1fr}
-@media(max-width:700px){.modal-grid{grid-template-columns:1fr}}
-.modal-ph{background:#0a0d11;position:relative}
-.modal-ph img{width:100%;height:100%;object-fit:cover;max-height:460px}
-.modal-b{padding:24px 26px;max-height:70vh;overflow:auto}
+.modal-grid{display:grid;grid-template-columns:minmax(250px,40%) 1fr;align-items:stretch}
+@media(max-width:700px){
+  .modal-grid{grid-template-columns:1fr}
+  .modal-ph{border-right:0!important;border-bottom:1px solid var(--line)}
+  .modal-ph .ph-foot{margin-top:0}
+}
+/* медиколонна: фото показано ЦЕЛИКОМ (object-fit:contain), свободное место
+   занимает текстурированный «планшет» и архивная плашка внизу */
+.modal-ph{
+  background:repeating-linear-gradient(45deg,#0b0f14 0 10px,#0a0d11 10px 20px);
+  border-right:1px solid var(--line);
+  display:flex;flex-direction:column;position:relative;
+}
+.modal-ph img{
+  width:100%;height:auto;max-height:62vh;display:block;
+  object-fit:contain;object-position:50% 50%;
+}
+.modal-ph .ph-foot{
+  margin-top:auto;padding:11px 14px;border-top:1px dashed var(--line-2);
+  font-family:var(--f-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--txt-mute);display:flex;justify-content:space-between;gap:10px;align-items:center;
+}
+.modal-ph .ph-foot b{color:var(--amber);font-weight:400;white-space:nowrap}
+.modal-b{padding:24px 26px;max-height:min(82vh,860px);overflow:auto}
 .modal-b h3{font-family:var(--f-head);font-size:24px;color:#fff;text-transform:uppercase;line-height:1.1;letter-spacing:.02em}
 .specs{width:100%;border-collapse:collapse;margin:14px 0;font-size:12.5px}
 .specs td{padding:6px 0;border-bottom:1px dotted var(--line)}
@@ -521,9 +582,14 @@ main{min-height:80vh}
   position:fixed;left:50%;bottom:28px;transform:translate(-50%,120%);z-index:950;
   background:var(--red-d);color:#fff;border:1px solid var(--red-l);padding:11px 22px;
   font-family:var(--f-head);text-transform:uppercase;letter-spacing:.1em;font-size:13px;
-  transition:.3s cubic-bezier(.4,0,.2,1);box-shadow:0 10px 40px rgba(0,0,0,.7);
+  opacity:0;visibility:hidden;
+  transition:transform .3s cubic-bezier(.4,0,.2,1),opacity .3s,visibility 0s linear .3s;
+  box-shadow:0 10px 40px rgba(0,0,0,.7);
 }
-.toast.on{transform:translate(-50%,0)}
+.toast.on{
+  transform:translate(-50%,0);opacity:1;visibility:visible;
+  transition:transform .3s cubic-bezier(.4,0,.2,1),opacity .3s;
+}
 
 .imgph{
   width:100%;height:100%;min-height:150px;

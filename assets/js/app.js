@@ -90,7 +90,7 @@ PAGE.home = () => `
       ['timeline','Хроника','03','Восемнадцать точек, в которых история свернула не туда, куда вы помните'],
       ['chars','Личные дела','04','Девять досье: от председателя Совета Обороны до разыскиваемой программистки'],
       ['shop','Торгсеть «Заря»','05','Двадцать позиций каталога — от нейрошлема до кибернетического кота'],
-      ['map','Карта мира','06','Интерактивная карта, 177 стран, блоки влияния и настоящие флаги'],
+      ['map','Карта мира','06','Интерактивная карта мира образца 2077 года: единый СССР, соцлагерь, блоки влияния и флаги, соответствующие строю'],
       ['gosplan','Госплан','08','Показатели XVII пятилетки, отраслевые задания и процент выполнения'],
       ['tech','Технологии','09','Шесть столпов: Сеть, нейроинтерфейс, термояд, маглев, биосинтез, «Госплан-9»'],
       ['news','Правда-2077','11','Свежий номер главной газеты Союза — восемь материалов'],
@@ -232,7 +232,7 @@ PAGE.map = () => `
 <div class="wrap">
   <div class="eyebrow">Раздел 06 · Контур «Глобус» · политическая обстановка на 2077 год</div>
   <h3 class="sec-title">Карта мира</h3>
-  <p class="sec-sub">177 государств. Наведите или нажмите на страну — откроется досье и настоящий государственный флаг. Колесо мыши — приближение, перетаскивание — сдвиг.</p>
+  <p class="sec-sub"><span id="mapcount">…</span> государств образца 2077 года: единый СССР, социалистический лагерь и прочие блоки влияния. Наведите или нажмите на страну — откроется досье и государственный флаг, соответствующий её строю. Колесо мыши — приближение, перетаскивание — сдвиг.</p>
   <div class="maplay">
     <div>
       <div class="mapbox">
@@ -259,7 +259,7 @@ PAGE.flags = () => `
 <div class="wrap">
   <div class="eyebrow">Раздел 07 · Справочник государственных символов</div>
   <h3 class="sec-title">Флаги держав</h3>
-  <p class="sec-sub">Полный набор настоящих государственных флагов, загруженных в контур «Глобус». Нажмите на флаг — откроется досье страны на карте.</p>
+  <p class="sec-sub">Государственные флаги держав образца 2077 года, загруженные в контур «Глобус»: для социалистического лагеря — полотнища, соответствующие строю. Нажмите на флаг — откроется досье страны на карте.</p>
   <input class="inp" id="fsearch" placeholder="Поиск по названию страны…" style="width:100%;max-width:420px;margin-bottom:18px">
   <div class="flagwall" id="flagwall"></div>
 </div>`;
@@ -544,12 +544,15 @@ function buildTabs() {
     `<button class="tab" data-tab="${t.id}"><i>${t.i}</i>${esc(t.n)}</button>`).join('');
   $('#main').innerHTML = TABS.map(t =>
     `<section class="page" id="p-${t.id}"></section>`).join('');
+  $('#menulist').innerHTML = TABS.map(t =>
+    `<button data-tab="${t.id}"><i>${t.i}</i>${esc(t.n)}</button>`).join('');
 }
 
 const built = {};
 function go(id, push = true) {
   if (!TABS.some(t => t.id === id)) id = 'home';
   $$('.tab').forEach(b => b.classList.toggle('on', b.dataset.tab === id));
+  $$('#menulist button').forEach(b => b.classList.toggle('on', b.dataset.tab === id));
   $$('.page').forEach(p => p.classList.toggle('on', p.id === 'p-' + id));
   if (!built[id]) {
     $('#p-' + id).innerHTML = PAGE[id]();
@@ -559,6 +562,24 @@ function go(id, push = true) {
   window.scrollTo({ top: 0, behavior: 'instant' });
   if (push) history.replaceState(null, '', '#' + id);
   document.title = (id === 'home' ? '' : TABS.find(t => t.id === id).n + ' · ') + 'КРАСНАЯ СЕТЬ · 2077';
+  closeMenu();
+}
+
+/* ---- бургер-меню ---- */
+function openMenu() {
+  $('#menu').classList.add('on');
+  $('#backdrop').classList.add('on');
+  $('#burger').classList.add('on');
+  $('#burger').setAttribute('aria-expanded', 'true');
+  $('#menu').setAttribute('aria-hidden', 'false');
+}
+function closeMenu() {
+  if (!$('#menu').classList.contains('on')) return;
+  $('#menu').classList.remove('on');
+  $('#burger').classList.remove('on');
+  $('#burger').setAttribute('aria-expanded', 'false');
+  $('#menu').setAttribute('aria-hidden', 'true');
+  if (!$('#drawer').classList.contains('on')) $('#backdrop').classList.remove('on');
 }
 
 /* --------------------------------------------------------------- */
@@ -620,7 +641,9 @@ function openGood(id) {
   $('#modalin').innerHTML = `
     <button class="modal-x" data-close>×</button>
     <div class="modal-grid">
-      <div class="modal-ph">${IMG(g.img, g.n)}</div>
+      <div class="modal-ph">${IMG(g.img, g.n)}
+        <div class="ph-foot"><span>Образец · торгсеть «Заря»</span><b>${esc(g.art)}</b></div>
+      </div>
       <div class="modal-b">
         <div class="good-art">${esc(g.art)} · ${esc(DB.cats.find(c => c.id === g.cat).n)}</div>
         <h3>${esc(g.n)}</h3>
@@ -641,7 +664,9 @@ function openChar(id) {
   $('#modalin').innerHTML = `
     <button class="modal-x" data-close>×</button>
     <div class="modal-grid">
-      <div class="modal-ph">${IMG(c.img, c.name)}</div>
+      <div class="modal-ph">${IMG(c.img, c.name)}
+        <div class="ph-foot"><span>Фото идентификационное · ОГАС-учёт</span><b>${esc(c.code)}</b></div>
+      </div>
       <div class="modal-b">
         <div class="good-art">ЛИЧНОЕ ДЕЛО ${esc(c.code)} · ${esc(c.loyal)}</div>
         <h3>${esc(c.name)}</h3>
@@ -723,6 +748,7 @@ async function loadWorld() {
 
 INIT.map = async () => {
   const w = await loadWorld();
+  $('#mapcount').textContent = w.countries.length;
   const svg = $('#worldmap');
   svg.innerHTML = `<g id="mapg">` + w.countries.map(c =>
     `<path class="cn ${w.blocOf[c.iso2] || 'bx'}" d="${c.d}" data-iso="${c.iso2 || ''}" data-id="${c.id}"><title>${esc(c.ru)}</title></path>`
@@ -780,14 +806,14 @@ INIT.map = async () => {
   svg.addEventListener('pointerup', () => drag = null);
   svg.addEventListener('pointercancel', () => drag = null);
 
-  pickCountry(WORLD.countries.find(c => c.iso2 === 'RU').id);
+  pickCountry(WORLD.countries.find(c => c.iso2 === 'SU').id);
 };
 
 /* процедурное досье для стран без ручного описания */
 function autoInfo(c) {
   const bl = WORLD.blocOf[c.iso2];
   const txt = {
-    b0: 'Союзная республика в составе ССР. Полная интеграция в контуры ОГАС, единая валюта, единый плановый горизонт.',
+    b0: 'Единое союзное государство: 19 республик от Балтики до Тихого океана. Полная интеграция в контуры ОГАС, единая валюта, единый плановый горизонт.',
     b1: 'Государство Организации Варшавского Договора. Согласованное планирование, общий оборонный контур, безвизовый режим с Союзом.',
     b2: 'Страна социалистической ориентации. Техническое содействие Союза, частичная интеграция в отраслевые контуры, льготные поставки оборудования.',
     b3: 'Участник Движения неприсоединения. Торгует с обоими блоками, сетевой стандарт собственный либо гибридный.',
@@ -905,7 +931,7 @@ INIT.terminal = () => {
   <span class="p">план</span>        — выполнение XVII пятилетки
   <span class="p">досье ИМЯ</span>   — личное дело (напр.: досье Морозов)
   <span class="p">каталог</span>     — позиции торгсети «Заря»
-  <span class="p">страна КОД</span>  — справка по стране (напр.: страна RU)
+  <span class="p">страна КОД</span>  — справка по стране (напр.: страна SU)
   <span class="p">хроника</span>     — ключевые даты
   <span class="p">время</span>       — время по Москве
   <span class="p">фракции</span>     — расклад в Верховном Совете
@@ -998,14 +1024,18 @@ document.addEventListener('click', e => {
 });
 
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { $('#modal').classList.remove('on'); closeCart(); }
+  if (e.key === 'Escape') { $('#modal').classList.remove('on'); closeCart(); closeMenu(); }
 });
 
 const openCart = () => { $('#drawer').classList.add('on'); $('#backdrop').classList.add('on'); };
-const closeCart = () => { $('#drawer').classList.remove('on'); $('#backdrop').classList.remove('on'); };
+const closeCart = () => {
+  $('#drawer').classList.remove('on');
+  if (!$('#menu').classList.contains('on')) $('#backdrop').classList.remove('on');
+};
 $('#cartbtn').onclick = openCart;
 $('#cartx').onclick = closeCart;
-$('#backdrop').onclick = closeCart;
+$('#backdrop').onclick = () => { closeCart(); closeMenu(); };
+$('#burger').onclick = () => ($('#menu').classList.contains('on') ? closeMenu() : openMenu());
 $('#cartorder').onclick = () => {
   const n = Object.values(CART).reduce((a, b) => a + b, 0);
   if (!n) return toast('Наряд-заказ пуст');
