@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>КРАСНАЯ СЕТЬ · 2077 — Союз Суверенных Советских Республик</title>
+<meta name="description" content="Альтернативная история: СССР не распался. Советский киберпанк 2077 года — Сеть, Госплан-9, торгсеть «Заря», карта мира и досье на граждан.">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23e01021'/><text y='24' x='6' font-size='22' fill='%23f5a623'>★</text></svg>">
+</head>
+<body>
+
+<!-- ================= ВЕРХНЯЯ ПАНЕЛЬ ================= -->
+<header class="topbar">
+  <div class="tick"><span id="ticker">ЗАГРУЗКА СВОДКИ…</span></div>
+  <div class="brandbar">
+    <div class="emblem"><b>★</b></div>
+    <div class="brandtxt">
+      <h1>КРАСНАЯ СЕТЬ</h1>
+      <p>ОГАС · Союз Суверенных Советских Республик · 2077</p>
+    </div>
+    <div class="sysinfo">
+      <div>УЗЕЛ <b>МСК-ГВЦ-1</b> · КАНАЛ <span class="ok">УСТОЙЧИВ</span></div>
+      <div id="clock">--:--:--</div>
+      <div>ГРАЖДАНИН: <b id="citizen">—</b></div>
+    </div>
+  </div>
+  <nav class="tabs"><div class="tabs-inner" id="tabs"></div></nav>
+</header>
+
+<main id="main"></main>
+
+<!-- ================= ПОДВАЛ ================= -->
+<footer class="foot">
+  <div class="foot-in">
+    <div>
+      <h5>Красная Сеть</h5>
+      <p style="font-size:12.3px;line-height:1.6">Единый информационный портал Общегосударственной автоматизированной системы. Работает на контуре «Быт-4». Материалы утверждены Главлитом ССР.</p>
+    </div>
+    <div>
+      <h5>Разделы</h5>
+      <a href="#" data-goto="home">Главная</a>
+      <a href="#" data-goto="shop">Торгсеть «Заря»</a>
+      <a href="#" data-goto="chars">Личные дела</a>
+      <a href="#" data-goto="map">Карта мира</a>
+      <a href="#" data-goto="gosplan">Госплан</a>
+    </div>
+    <div>
+      <h5>Гражданину</h5>
+      <a href="#" data-goto="docs">Законы и акты</a>
+      <a href="#" data-goto="faq">Вопросы и ответы</a>
+      <a href="#" data-goto="quiz">Проверка знаний</a>
+      <a href="#" data-goto="terminal">Терминал доступа</a>
+    </div>
+    <div>
+      <h5>Служебное</h5>
+      <p style="font-size:12.3px;line-height:1.6">Наркомат Сетевой Безопасности напоминает: пароль — как партбилет. Не передавай, не теряй, не показывай.</p>
+      <span class="stamp" style="margin-top:10px">Допущено к печати</span>
+    </div>
+  </div>
+  <div class="foot-b">
+    <span>© 1917—2077 СОЮЗ ССР · ВСЕ ПРАВА ПРИНАДЛЕЖАТ НАРОДУ</span>
+    <span>ВЫМЫШЛЕННЫЙ МИР · ХУДОЖЕСТВЕННОЕ ПРОИЗВЕДЕНИЕ</span>
+    <span>СБОРКА 77.4.11 · КОНТУР «БЫТ-4»</span>
+  </div>
+</footer>
+
+<!-- ================= КОРЗИНА ================= -->
+<button class="cartbtn" id="cartbtn">Заказ <b id="cartn">0</b></button>
+<div class="backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-h">
+    <h3>Наряд-заказ</h3>
+    <button id="cartx">×</button>
+  </div>
+  <div class="drawer-b" id="cartbody"></div>
+  <div class="drawer-f">
+    <div class="total">ИТОГО <b id="carttotal">0 ₽</b></div>
+    <div class="mini" id="cartmini">Талонов не требуется</div>
+    <button class="btn amber" style="width:100%;justify-content:center;margin-top:12px" id="cartorder">Оформить наряд</button>
+  </div>
+</aside>
+
+<!-- ================= МОДАЛЬНОЕ ОКНО ================= -->
+<div class="modal" id="modal">
+  <div class="modal-in" id="modalin"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
