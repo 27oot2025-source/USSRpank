@@ -111,7 +111,7 @@ input,select,textarea{font-family:inherit}
   background:#0a0e13;border-top:1px solid var(--line);
   overflow-x:auto;scrollbar-width:thin;
 }
-.tabs-inner{display:flex;gap:1px;padding:0 10px} /* вкладки начинаются с левого края экрана */
+.tabs-inner{display:flex;gap:1px;padding:0;min-width:max-content} /* вкладки начинаются строго от левого края экрана */
 .tab{
   position:relative;flex:none;
   padding:11px 15px 10px;
@@ -410,8 +410,16 @@ main{min-height:80vh}
   display:flex;flex-direction:column;position:relative;
 }
 .modal-ph img{
-  width:100%;height:auto;max-height:62vh;display:block;
+  width:100%;height:auto;max-height:min(62vh,620px);display:block;
   object-fit:contain;object-position:50% 50%;
+  /* Не обрезаем портреты и товарные снимки: изображение всегда целиком внутри панели. */
+}
+.modal-ph{min-height:0;align-items:stretch}
+.modal-ph img + .ph-foot{flex:none}
+@media(max-width:700px){
+  .modal{padding:10px}
+  .modal-in{max-height:calc(100vh - 20px);overflow:auto}
+  .modal-ph img{max-height:46vh;width:100%;object-fit:contain}
 }
 .modal-ph .ph-foot{
   margin-top:auto;padding:11px 14px;border-top:1px dashed var(--line-2);
